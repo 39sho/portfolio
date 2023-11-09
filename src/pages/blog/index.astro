@@ -1,0 +1,29 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../../layouts/default.astro";
+import BlogList from "../../components/BlogList.astro";
+import BlogCard from "../../components/BlogCard.astro";
+import Header from "../../components/Header.astro";
+
+const entries = await getCollection("blog");
+---
+
+<Layout>
+    <Header />
+    <BlogList>
+        {
+            entries
+                .sort(
+                    (entryA, entryB) =>
+                        entryB.data.date.getTime() - entryA.data.date.getTime(),
+                )
+                .map((entry) => (
+                    <BlogCard
+                        link={`/blog/${entry.slug}`}
+                        title={entry.data.title}
+                        summary={entry.data.summary}
+                    />
+                ))
+        }
+    </BlogList>
+</Layout>

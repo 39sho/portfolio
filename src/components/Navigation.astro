@@ -1,0 +1,35 @@
+---
+type NavItem = {
+    link: string;
+    text: string;
+};
+
+const nav: NavItem[] = [
+    {
+        link: "/",
+        text: "About",
+    },
+    {
+        link: "/contact",
+        text: "Contact",
+    },
+    {
+        link: "/works",
+        text: "Works",
+    },
+    {
+        link: "/blog",
+        text: "Blog",
+    },
+];
+---
+
+<nav class="flex items-center">
+    {
+        nav.map(({ link, text }) => (
+            <div class="flex-1 text-center text-xl border-l-2 first:border-l-0 border-neutral-200">
+                <a href={link}>{text}</a>
+            </div>
+        ))
+    }
+</nav>
