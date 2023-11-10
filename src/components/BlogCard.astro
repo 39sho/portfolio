@@ -1,0 +1,24 @@
+---
+import Share from "./Share.astro";
+
+interface Props {
+    link: string;
+    title: string;
+    summary: string;
+}
+
+const { link, title, summary } = Astro.props;
+---
+
+<div class="w-full p-6 bg-neutral-100 border-2 border-neutral-200">
+    <div class="flex justify-between">
+        <a href={link}>
+            <div>{title}</div>
+        </a>
+        <Share url={link} text={summary} title={title} />
+    </div>
+    <a href={link}>
+        <div class="w-full h-0.5 my-3 bg-neutral-200"></div>
+        <div>{summary}</div>
+    </a>
+</div>

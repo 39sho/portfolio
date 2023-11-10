@@ -1,0 +1,29 @@
+---
+import avator from "../assets/avator.png";
+
+import Layout from "../layouts/default.astro";
+import Header from "../components/Header.astro";
+import Avator from "../components/Avator.astro";
+import Hero from "../components/Hero.astro";
+import Address from "../components/Address/Address.astro";
+import Item from "../components/Address/Item.astro";
+---
+
+<Layout>
+    <Hero>
+        <Avator img={avator} slot="avator" />
+        <span slot="name">39sho(さくしょー)</span>
+    </Hero>
+    <Address>
+        <Item>
+            <span slot="key">Email</span>
+            <span slot="value"
+                >sakusho@<このサイトのセカンドレベルドメイン></span
+            >
+        </Item>
+        <Item>
+            <span slot="key">X</span>
+            <span slot="value">@G_39sho</span>
+        </Item>
+    </Address>
+</Layout>

@@ -1,0 +1,15 @@
+---
+interface Props {
+    img: ImageMetadata;
+}
+
+import { Image } from "astro:assets";
+
+const { img } = Astro.props;
+---
+
+<Image
+    src={img}
+    alt="avator"
+    class="rounded-full bg-white border-white border-8"
+/>
