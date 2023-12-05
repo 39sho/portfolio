@@ -3,18 +3,38 @@ import { getCollection } from "astro:content";
 import Layout from "../../layouts/default.astro";
 import Header from "../../components/Header.astro";
 import BlogCard from "../../components/BlogCard.astro";
+import { getBacklinks } from "../../lib/backlink";
+import BlogList from "../../components/BlogList.astro";
+import { getEntry } from "astro:content";
+import type { CollectionEntry, CollectionKey } from "astro:content";
+
+type Entry = CollectionEntry<CollectionKey>;
 
 export async function getStaticPaths() {
     const entries = await getCollection("blog");
 
+    const backlinks = await getBacklinks([entries]);
+
     return entries.map((entry) => ({
         params: { slug: entry.slug },
-        props: { entry },
+        props: {
+            entry,
+            backlink:
+                backlinks.get(`/${entry.collection}/${entry.slug}/`) ?? [],
+        },
     }));
 }
 
-const { entry } = Astro.props;
+const { entry, backlink } = Astro.props;
 const { Content } = await entry.render();
+
+const backlinkEntries = (
+    await Promise.all(
+        backlink.map((link) =>
+            getEntry(link.split("/")[1] as CollectionKey, link.split("/")[2]),
+        ),
+    )
+).filter((entry): entry is Entry => entry != null);
 ---
 
 <Layout
@@ -33,5 +53,24 @@ const { Content } = await entry.render();
         class="prose p-4 w-full max-w-2xl bg-neutral-100 border-2 border-neutral-200"
     >
         <Content />
+    </div>
+    <div class="w-full max-w-2xl">
+        <span>Backlinks</span>
+        <BlogList>
+            {
+                backlinkEntries
+                    .sort(
+                        (entryA, entryB) =>
+                            entryB.data.date.getTime() -
+                            entryA.data.date.getTime(),
+                    )
+                    .map((entry) => (
+                        <BlogCard
+                            link={`/blog/${entry.slug}`}
+                            title={entry.data.title}
+                        />
+                    ))
+            }
+        </BlogList>
     </div>
 </Layout>

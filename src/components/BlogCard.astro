@@ -4,7 +4,7 @@ import Share from "./Share.astro";
 interface Props {
     link: string;
     title: string;
-    summary: string;
+    summary?: string;
 }
 
 const { link, title, summary } = Astro.props;
@@ -15,10 +15,18 @@ const { link, title, summary } = Astro.props;
         <a href={link}>
             <div>{title}</div>
         </a>
-        <Share url={link} text={summary} title={title} />
+        <Share url={link} text={summary ?? `${title}の共有`} title={title} />
     </div>
-    <div class="w-full h-0.5 my-3 bg-neutral-200"></div>
-    <a href={link}>
-        <div>{summary}</div>
-    </a>
+    {
+        summary != null ? (
+            <>
+                <div class="w-full h-0.5 my-3 bg-neutral-200" />
+                <a href={link}>
+                    <div>{summary}</div>
+                </a>
+            </>
+        ) : (
+            ""
+        )
+    }
 </div>
