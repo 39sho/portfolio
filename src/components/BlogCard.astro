@@ -10,23 +10,25 @@ interface Props {
 const { link, title, summary } = Astro.props;
 ---
 
-<div class="w-full p-6 bg-neutral-100 border-2 border-neutral-200">
-    <div class="flex justify-between">
-        <a href={link}>
-            <div>{title}</div>
-        </a>
+<div class="relative">
+    <a href={link}>
+        <div class="w-full p-6 border-2 border-neutral-200">
+            <div class="flex justify-between">
+                <div>{title}</div>
+            </div>
+            {
+                summary != null ? (
+                    <>
+                        <div class="w-full h-0.5 my-3 bg-neutral-200" />
+                        <div>{summary}</div>
+                    </>
+                ) : (
+                    ""
+                )
+            }
+        </div>
+    </a>
+    <div class="absolute right-6 top-6">
         <Share url={link} text={summary ?? `${title}の共有`} title={title} />
     </div>
-    {
-        summary != null ? (
-            <>
-                <div class="w-full h-0.5 my-3 bg-neutral-200" />
-                <a href={link}>
-                    <div>{summary}</div>
-                </a>
-            </>
-        ) : (
-            ""
-        )
-    }
 </div>
