@@ -1,4 +1,5 @@
 ---
+import { collapseTextChangeRangesAcrossMultipleVersions } from "typescript";
 type NavItem = {
     link: string;
     text: string;
@@ -22,14 +23,21 @@ const nav: NavItem[] = [
         text: "Blog",
     },
 ];
+
+const current = `/${Astro.url.pathname.split("/")[1]}`;
 ---
 
 <nav class="flex items-center">
     {
         nav.map(({ link, text }) => (
-            <div class="flex-1 text-center text-xl border-l-2 first:border-l-0 border-neutral-200">
-                <a href={link}>{text}</a>
-            </div>
+            <a
+                href={link}
+                class="flex-1 text-center text-xl border-l-2 first:border-l-0 border-neutral-200"
+            >
+                <div class={link == current ? "bg-neutral-200" : ""}>
+                    {text}
+                </div>
+            </a>
         ))
     }
 </nav>
