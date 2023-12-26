@@ -32,12 +32,12 @@ summary:
 
 ### 概要
 
-バックリンクをこのブログに実装した。このブログはAstroでつくられているので、Astro用である。
+バックリンクをこのブログに実装した。Astroの機能を利用しているのでAstro専用である。
 
 各ページでContent Collectionsをすべて解析することで、SSGに対応しつつdev serverにも対応した。
 
-全体としては、markdownの解析を行ないfrontmatterに順方向のリンク一覧を書き込むRehypeプラグインと、
-astroコンポーネント内ですべてのmarkdownのfrontmatterを読み、逆方向のリンクに変換する関数で構成される。
+全体としては、markdownの解析を行ないフロントマターに順方向のリンク一覧を書き込むRehypeプラグインと、
+astroコンポーネント内ですべてのmarkdownのフロントマターを読み、逆方向のリンクに変換する関数で構成される。
 
 ### どうしてそのような設計になったか。あるいは設計の苦悩
 
@@ -87,18 +87,55 @@ astroコンポーネント内ですべてのmarkdownのfrontmatterを読み、�
 
 ### 実装のくふう
 
-TODO: あとで書く
+次のコードはrehypeのプラグインの一部。ここでhastを読み、フロントマターに書き込んでいる。
+
+```ts
+    const forlinkNodes: hast.Element[] = [];
+    visit(tree, (node, _index, _parent) => {
+        if (node.type === 'element' && node.tagName === 'a')
+            forlinkNodes.push(node);
+    });
+
+    setVfileFrontmatter(file, {
+        forlink: forlinkNodes
+            .map(node =>
+                node.properties == null ?
+                    {} :
+                    node.properties
+            )
+            .map(properties => properties.href)
+            .filter((link): link is string => typeof link == 'string'),
+    });
+```
+
+そして`getStaticPaths()`の中でフロントマターを読み、各ページでレンダリングする。
+`astro dev`を実行中、content collectionsの更新にあわせてバックリンクを再生成することができる。
+
+```ts
+export async function getStaticPaths() {
+    const entries = await getCollection("blog");
+
+    const backlinks = await getBacklinks([entries]);
+
+    return entries.map((entry) => ({
+        params: { slug: entry.slug },
+        props: {
+            entry,
+            backlink:
+                backlinks.get(`/${entry.collection}/${entry.slug}/`) ?? [],
+        },
+    }));
+}
+```
+
 
 ## おわりに
 
 ### 実装について
 
-今回の面倒な点は、すべてastroに起因するものだ。
-astroがレンダリングのapiを用意してなかったり、コンポーネントがクライアントで使えなかったり。
+Astroに苦しめられた感が強い。
 
 ### アドカレについて
 
-前日4日に、衝動的に登録した。そのあと実装し、この記事を書いた。
-単純につらいし、ギリギリなので次はもっと余裕を見てやる。
-
-テスト期間にやることでもない。
+アドカレに衝動的に登録したが、ギリギリ間に合った。
+もうすこし余裕をもって登録すべき。
