@@ -42,14 +42,14 @@ const backlinkEntries = (
     description={entry.data.summary}
 >
     <Header />
-    <div class="w-full max-w-2xl">
+    <div class="w-full max-w-2xl p-4">
         <BlogCard
             link={`/blog/${entry.slug}`}
             title={entry.data.title}
             summary={entry.data.summary}
         />
     </div>
-    <div class="prose p-4 w-full max-w-2xl border-2 border-neutral-200">
+    <div class="prose p-4 w-full max-w-2xl">
         <Content />
     </div>
     <div class="w-full max-w-2xl">
