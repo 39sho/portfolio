@@ -6,6 +6,7 @@ import Avator from "../components/Avator.astro";
 import Hero from "../components/Hero.astro";
 import Address from "../components/Address/Address.astro";
 import Item from "../components/Address/Item.astro";
+import Main from "../layouts/Main.astro";
 ---
 
 <Layout title="Contact | 39sho.dev" description="39shoへ連絡">
@@ -13,14 +14,16 @@ import Item from "../components/Address/Item.astro";
         <Avator img={avator} slot="avator" />
         <span slot="name">39sho(さくしょー)</span>
     </Hero>
-    <Address>
-        <Item>
-            <span slot="key">Email</span>
-            <span slot="value">sakusho@<ドメイン></span>
-        </Item>
-        <Item>
-            <span slot="key">X</span>
-            <span slot="value">@G_39sho</span>
-        </Item>
-    </Address>
+    <Main>
+        <Address>
+            <Item>
+                <span slot="key">Email</span>
+                <span slot="value">sakusho@<ドメイン></span>
+            </Item>
+            <Item>
+                <span slot="key">X</span>
+                <span slot="value">@G_39sho</span>
+            </Item>
+        </Address>
+    </Main>
 </Layout>

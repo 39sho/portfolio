@@ -4,9 +4,10 @@ import Layout from "../../layouts/default.astro";
 import Header from "../../components/Header.astro";
 import BlogCard from "../../components/BlogCard.astro";
 import { getBacklinks } from "../../lib/backlink";
-import BlogList from "../../components/BlogList.astro";
 import { getEntry } from "astro:content";
 import type { CollectionEntry, CollectionKey } from "astro:content";
+import Stack from "../../layouts/Stack.astro";
+import Main from "../../layouts/Main.astro";
 
 type Entry = CollectionEntry<CollectionKey>;
 
@@ -42,33 +43,33 @@ const backlinkEntries = (
     description={entry.data.summary}
 >
     <Header />
-    <div class="w-full max-w-2xl p-4">
+    <Main>
         <BlogCard
             link={`/blog/${entry.slug}`}
             title={entry.data.title}
             summary={entry.data.summary}
         />
-    </div>
-    <div class="prose p-4 w-full max-w-2xl">
-        <Content />
-    </div>
-    <div class="w-full max-w-2xl">
-        <span>Backlinks</span>
-        <BlogList>
-            {
-                backlinkEntries
-                    .sort(
-                        (entryA, entryB) =>
-                            entryB.data.date.getTime() -
-                            entryA.data.date.getTime(),
-                    )
-                    .map((entry) => (
-                        <BlogCard
-                            link={`/blog/${entry.slug}`}
-                            title={entry.data.title}
-                        />
-                    ))
-            }
-        </BlogList>
-    </div>
+        <div class="prose py-8 w-full max-w-full">
+            <Content />
+        </div>
+        <div>
+            <span>Backlinks</span>
+            <Stack>
+                {
+                    backlinkEntries
+                        .sort(
+                            (entryA, entryB) =>
+                                entryB.data.date.getTime() -
+                                entryA.data.date.getTime(),
+                        )
+                        .map((entry) => (
+                            <BlogCard
+                                link={`/blog/${entry.slug}`}
+                                title={entry.data.title}
+                            />
+                        ))
+                }
+            </Stack>
+        </div>
+    </Main>
 </Layout>

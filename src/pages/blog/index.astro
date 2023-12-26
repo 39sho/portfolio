@@ -1,29 +1,33 @@
 ---
 import { getCollection } from "astro:content";
 import Layout from "../../layouts/default.astro";
-import BlogList from "../../components/BlogList.astro";
 import BlogCard from "../../components/BlogCard.astro";
 import Header from "../../components/Header.astro";
+import Main from "../../layouts/Main.astro";
+import Stack from "../../layouts/Stack.astro";
 
 const entries = await getCollection("blog");
 ---
 
 <Layout title="Blog | 39sho.dev" description="39shoのブログ">
     <Header />
-    <BlogList>
-        {
-            entries
-                .sort(
-                    (entryA, entryB) =>
-                        entryB.data.date.getTime() - entryA.data.date.getTime(),
-                )
-                .map((entry) => (
-                    <BlogCard
-                        link={`/blog/${entry.slug}`}
-                        title={entry.data.title}
-                        summary={entry.data.summary}
-                    />
-                ))
-        }
-    </BlogList>
+    <Main>
+        <Stack>
+            {
+                entries
+                    .sort(
+                        (entryA, entryB) =>
+                            entryB.data.date.getTime() -
+                            entryA.data.date.getTime(),
+                    )
+                    .map((entry) => (
+                        <BlogCard
+                            link={`/blog/${entry.slug}`}
+                            title={entry.data.title}
+                            summary={entry.data.summary}
+                        />
+                    ))
+            }
+        </Stack>
+    </Main>
 </Layout>
