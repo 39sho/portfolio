@@ -27,9 +27,14 @@ const nav: NavItem[] = [
 <nav class="flex items-center">
     {
         nav.map(({ link, text }) => (
-            <div class="flex-1 text-center text-xl border-l-2 first:border-l-0 border-neutral-200">
-                <a href={link}>{text}</a>
-            </div>
+            <>
+                <a
+                    href={link}
+                    class="flex-1 text-center text-xl border-l-2 first:border-l-0 border-neutral-200"
+                >
+                    <div>{text}</div>
+                </a>
+            </>
         ))
     }
 </nav>
