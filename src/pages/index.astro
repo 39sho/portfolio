@@ -4,9 +4,12 @@ import avator from "../assets/avator.png";
 import Layout from "../layouts/default.astro";
 import Avator from "../components/Avator.astro";
 import Hero from "../components/Hero.astro";
-import Profile from "../components/Profile/Profile.astro";
-import Item from "../components/Profile/Item.astro";
 import Main from "../layouts/Main.astro";
+import { getEntry } from "astro:content";
+import Header from "../components/Header.astro";
+
+const entry = await getEntry("profile", "about");
+const { Content } = await entry.render();
 ---
 
 <Layout title="39sho.dev" description="39shoのサイト">
@@ -14,79 +17,12 @@ import Main from "../layouts/Main.astro";
 		<Avator img={avator} slot="avator" />
 		<span slot="name">39sho(さくしょー)</span>
 	</Hero>
+	<div class="sticky top-0 my-4 z-50">
+		<Header />
+	</div>
 	<Main>
-		<Profile>
-			<Item>
-				<span slot="key">名前</span>
-				<span slot="value">作山 祥太</span>
-			</Item>
-			<Item>
-				<span slot="key">なまえ</span>
-				<span slot="value">さくやま しょうた</span>
-			</Item>
-			<Item>
-				<span slot="key">ハンドルネーム</span>
-				<span slot="value">39sho(さくしょー)</span>
-			</Item>
-			<Item>
-				<span slot="key">誕生日</span>
-				<span slot="value">2003/08/04</span>
-			</Item>
-			<Item>
-				<span slot="key">所属</span>
-				<span slot="value">会津大学 学部1年</span>
-			</Item>
-			<Item>
-				<span slot="key">サークル</span>
-				<span slot="value">Zli</span>
-			</Item>
-			<Item>
-				<span slot="value">REMs</span>
-			</Item>
-			<Item>
-				<span slot="key">好きなもの</span>
-				<span slot="value">辛い料理</span>
-			</Item>
-			<Item>
-				<span slot="value">スキー</span>
-			</Item>
-			<Item>
-				<span slot="key">趣味</span>
-				<span slot="value">CoderDojo</span>
-			</Item>
-			<Item>
-				<span slot="value">Web</span>
-			</Item>
-			<Item>
-				<span slot="value">電子工作</span>
-			</Item>
-			<Item>
-				<span slot="key">リンク</span>
-				<a href="https://x.com/G_39sho" slot="value" class="underline"
-					>X(@G_39sho)</a
-				>
-			</Item>
-			<Item>
-				<a
-					href="https://github.com/39sho"
-					slot="value"
-					class="underline">GitHub(39sho)</a
-				>
-			</Item>
-			<Item>
-				<a
-					href="https://codepen.io/39sho"
-					slot="value"
-					class="underline">CodePen(@39sho)</a
-				>
-			</Item>
-			<Item>
-				<a
-					href="https://scratch.mit.edu/users/39sho/"
-					slot="value"
-					class="underline">Scratch(39sho)</a
-				>
-			</Item>
-		</Profile>
+		<div class="prose">
+			<Content />
+		</div>
 	</Main>
 </Layout>

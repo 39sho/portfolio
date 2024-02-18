@@ -1,5 +1,4 @@
 ---
-import { collapseTextChangeRangesAcrossMultipleVersions } from "typescript";
 type NavItem = {
     link: string;
     text: string;
@@ -34,9 +33,11 @@ const current = `/${Astro.url.pathname.split("/")[1]}`;
                 href={link}
                 class="flex-1 text-center text-xl border-l-2 first:border-l-0 border-neutral-200"
             >
-                <div class={link == current ? "bg-neutral-200" : ""}>
+                <span
+                    class={link == current ? "border-b-2 border-green-900" : ""}
+                >
                     {text}
-                </div>
+                </span>
             </a>
         ))
     }

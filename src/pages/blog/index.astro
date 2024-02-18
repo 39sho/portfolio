@@ -10,7 +10,9 @@ const entries = await getCollection("blog");
 ---
 
 <Layout title="Blog | 39sho.dev" description="39shoのブログ">
-    <Header />
+    <div class="sticky top-0 z-50">
+        <Header />
+    </div>
     <Main>
         <Stack>
             {

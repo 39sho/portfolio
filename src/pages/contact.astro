@@ -4,9 +4,12 @@ import avator from "../assets/avator.png";
 import Layout from "../layouts/default.astro";
 import Avator from "../components/Avator.astro";
 import Hero from "../components/Hero.astro";
-import Address from "../components/Address/Address.astro";
-import Item from "../components/Address/Item.astro";
 import Main from "../layouts/Main.astro";
+import { getEntry } from "astro:content";
+import Header from "../components/Header.astro";
+
+const entry = await getEntry("profile", "contact");
+const { Content } = await entry.render();
 ---
 
 <Layout title="Contact | 39sho.dev" description="39shoへ連絡">
@@ -14,16 +17,12 @@ import Main from "../layouts/Main.astro";
         <Avator img={avator} slot="avator" />
         <span slot="name">39sho(さくしょー)</span>
     </Hero>
+    <div class="sticky top-0 my-4 z-50">
+        <Header />
+    </div>
     <Main>
-        <Address>
-            <Item>
-                <span slot="key">Email</span>
-                <span slot="value">sakusho@<ドメイン></span>
-            </Item>
-            <Item>
-                <span slot="key">X</span>
-                <span slot="value">@G_39sho</span>
-            </Item>
-        </Address>
+        <div class="prose">
+            <Content />
+        </div>
     </Main>
 </Layout>
