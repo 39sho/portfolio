@@ -6,6 +6,7 @@ import Avator from "../components/Avator.astro";
 import Hero from "../components/Hero.astro";
 import Main from "../layouts/Main.astro";
 import { getEntry } from "astro:content";
+import Header from "../components/Header.astro";
 
 const entry = await getEntry("profile", "contact");
 const { Content } = await entry.render();
@@ -16,6 +17,9 @@ const { Content } = await entry.render();
         <Avator img={avator} slot="avator" />
         <span slot="name">39sho(さくしょー)</span>
     </Hero>
+    <div class="sticky top-0 my-4 z-50">
+        <Header />
+    </div>
     <Main>
         <div class="prose">
             <Content />

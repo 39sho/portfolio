@@ -42,7 +42,9 @@ const backlinkEntries = (
     title={`${entry.data.title} | 39sho.dev`}
     description={entry.data.summary}
 >
-    <Header />
+    <div class="sticky top-0 z-50">
+        <Header />
+    </div>
     <Main>
         <BlogCard
             link={`/blog/${entry.slug}`}
