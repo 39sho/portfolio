@@ -8,6 +8,7 @@ import { getEntry } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 import Stack from "../../layouts/Stack.astro";
 import Main from "../../layouts/Main.astro";
+import Toc from "../../components/Toc.astro";
 
 type Entry = CollectionEntry<"blog">;
 
@@ -27,7 +28,7 @@ export async function getStaticPaths() {
 }
 
 const { entry, backlink } = Astro.props;
-const { Content } = await entry.render();
+const { Content, headings } = await entry.render();
 
 const backlinkEntries = (
     await Promise.all(
@@ -51,6 +52,9 @@ const backlinkEntries = (
             title={entry.data.title}
             summary={entry.data.summary}
         />
+        <div class="my-2 right-0">
+            <Toc headings={headings} />
+        </div>
         <div class="prose py-8 w-full mx-w-full">
             <Content />
         </div>
