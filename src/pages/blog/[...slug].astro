@@ -5,11 +5,11 @@ import Header from "../../components/Header.astro";
 import BlogCard from "../../components/BlogCard.astro";
 import { getBacklinks } from "../../lib/backlink";
 import { getEntry } from "astro:content";
-import type { CollectionEntry, CollectionKey } from "astro:content";
+import type { CollectionEntry } from "astro:content";
 import Stack from "../../layouts/Stack.astro";
 import Main from "../../layouts/Main.astro";
 
-type Entry = CollectionEntry<CollectionKey>;
+type Entry = CollectionEntry<"blog">;
 
 export async function getStaticPaths() {
     const entries = await getCollection("blog");
@@ -32,7 +32,7 @@ const { Content } = await entry.render();
 const backlinkEntries = (
     await Promise.all(
         backlink.map((link) =>
-            getEntry(link.split("/")[1] as CollectionKey, link.split("/")[2]),
+            getEntry(link.split("/")[1] as "blog", link.split("/")[2]),
         ),
     )
 ).filter((entry): entry is Entry => entry != null);
@@ -49,7 +49,7 @@ const backlinkEntries = (
             title={entry.data.title}
             summary={entry.data.summary}
         />
-        <div class="prose py-8 w-full max-w-full">
+        <div class="prose py-8 w-full mx-w-full">
             <Content />
         </div>
         <div>
