@@ -18,10 +18,12 @@ const { headings } = Astro.props;
             {
                 headings.map((heading) => (
                     <li>
-                        <a
-                            href={`#${heading.slug}`}
-                            class="whitespace-pre"
-                        >{`${genHash(heading.depth)} ${heading.text}`}</a>
+                        <a href={`#${heading.slug}`} class="flex">
+                            <span class="block w-12 flex-shrink-0">
+                                {genHash(heading.depth)}
+                            </span>
+                            {heading.text}
+                        </a>
                     </li>
                 ))
             }
