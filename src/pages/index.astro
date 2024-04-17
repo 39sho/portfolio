@@ -21,8 +21,12 @@ const { Content } = await entry.render();
 		<Header />
 	</div>
 	<Main>
-		<div class="prose prose-table:text-base">
-			<Content />
+		<div
+			class="prose prose-table:text-base w-full mx-w-full mx-auto max-w-none"
+		>
+			<div class="prose prose-table:text-base mx-auto">
+				<Content />
+			</div>
 		</div>
 	</Main>
 </Layout>
