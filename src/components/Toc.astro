@@ -1,12 +1,14 @@
 ---
-interface TocLink {
+import TocItem from "./TocItem.astro";
+
+export interface TocLink {
     id: string;
     text: string;
     depth: number;
     children?: TocLink[];
 }
 
-interface Props {
+export interface Props {
     toc: {
         title?: string;
         depth?: number;
@@ -14,9 +16,6 @@ interface Props {
         links?: TocLink[];
     };
 }
-
-const genHash = (n: number) =>
-    [...Array(n).fill("#"), ...Array(5 - n).fill(" ")].join("");
 
 const { toc } = Astro.props;
 const links = toc?.links ?? [];
@@ -26,32 +25,7 @@ const links = toc?.links ?? [];
     <summary>目次</summary>
     <nav class="p-4">
         <ol class="flex flex-col gap-1">
-            {
-                links.map((link) => (
-                    <li>
-                        <a href={`#${link.id}`} class="flex">
-                            <span class="block w-12 flex-shrink-0">
-                                {genHash(link.depth)}
-                            </span>
-                            {link.text}
-                        </a>
-                        {link.children && link.children.length > 0 && (
-                            <ol class="flex flex-col gap-1 ml-4">
-                                {link.children.map((child) => (
-                                    <li>
-                                        <a href={`#${child.id}`} class="flex">
-                                            <span class="block w-12 flex-shrink-0">
-                                                {genHash(child.depth)}
-                                            </span>
-                                            {child.text}
-                                        </a>
-                                    </li>
-                                ))}
-                            </ol>
-                        )}
-                    </li>
-                ))
-            }
+            {links.map((link) => <TocItem {...link} />)}
         </ol>
     </nav>
 </details>
