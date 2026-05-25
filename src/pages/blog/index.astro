@@ -24,7 +24,7 @@ const entries = await getCollection("blog");
                     )
                     .map((entry) => (
                         <BlogCard
-                            link={`/blog/${entry.slug}`}
+                            link={`/blog/${entry.id}`}
                             title={entry.data.title}
                             summary={entry.data.summary}
                         />

@@ -1,14 +1,25 @@
 ---
-import type { MarkdownHeading } from "astro";
+interface TocLink {
+    id: string;
+    text: string;
+    depth: number;
+    children?: TocLink[];
+}
 
 interface Props {
-    headings: MarkdownHeading[];
+    toc: {
+        title?: string;
+        depth?: number;
+        searchDepth?: number;
+        links?: TocLink[];
+    };
 }
 
 const genHash = (n: number) =>
     [...Array(n).fill("#"), ...Array(5 - n).fill(" ")].join("");
 
-const { headings } = Astro.props;
+const { toc } = Astro.props;
+const links = toc?.links ?? [];
 ---
 
 <details class="p-2 border-2 border-neutral-200 rounded-lg w-fit">
@@ -16,14 +27,28 @@ const { headings } = Astro.props;
     <nav class="p-4">
         <ol class="flex flex-col gap-1">
             {
-                headings.map((heading) => (
+                links.map((link) => (
                     <li>
-                        <a href={`#${heading.slug}`} class="flex">
+                        <a href={`#${link.id}`} class="flex">
                             <span class="block w-12 flex-shrink-0">
-                                {genHash(heading.depth)}
+                                {genHash(link.depth)}
                             </span>
-                            {heading.text}
+                            {link.text}
                         </a>
+                        {link.children && link.children.length > 0 && (
+                            <ol class="flex flex-col gap-1 ml-4">
+                                {link.children.map((child) => (
+                                    <li>
+                                        <a href={`#${child.id}`} class="flex">
+                                            <span class="block w-12 flex-shrink-0">
+                                                {genHash(child.depth)}
+                                            </span>
+                                            {child.text}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ol>
+                        )}
                     </li>
                 ))
             }

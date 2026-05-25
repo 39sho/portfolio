@@ -1,34 +1,52 @@
 ---
-import { getCollection } from "astro:content";
+import { getCollection, getEntry } from "astro:content";
 import Layout from "../../layouts/default.astro";
 import Header from "../../components/Header.astro";
 import BlogCard from "../../components/BlogCard.astro";
 import { getBacklinks } from "../../lib/backlink";
-import { getEntry } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 import Stack from "../../layouts/Stack.astro";
 import Main from "../../layouts/Main.astro";
 import Toc from "../../components/Toc.astro";
+
+import { parse } from 'comark';
+import toc from 'comark/plugins/toc';
+import { ComarkRenderer } from '@comark/react';
+
+import highlight from 'comark/plugins/highlight';
+import githubLight from '@shikijs/themes/github-light';
+import githubDark from '@shikijs/themes/github-dark';
+
+const parsePost = async (body: string) => {
+    return parse(body, {
+        plugins: [
+            toc(),
+            highlight({ themes: { light: githubLight, dark: githubDark } }),
+        ],
+    });
+};
 
 type Entry = CollectionEntry<"blog">;
 
 export async function getStaticPaths() {
     const entries = await getCollection("blog");
 
-    const backlinks = await getBacklinks([entries]);
+    const backlinks = await getBacklinks(entries);
 
     return entries.map((entry) => ({
-        params: { slug: entry.slug },
+        params: { id: entry.id },
         props: {
             entry,
             backlink:
-                backlinks.get(`/${entry.collection}/${entry.slug}/`) ?? [],
+                backlinks.get(`/${entry.collection}/${entry.id}/`) ?? [],
         },
     }));
 }
 
 const { entry, backlink } = Astro.props;
-const { Content, headings } = await entry.render();
+
+const tree = await parsePost(entry.body ?? '');
+const tocData = tree.meta.toc;
 
 const backlinkEntries = (
     await Promise.all(
@@ -48,15 +66,15 @@ const backlinkEntries = (
     </div>
     <Main>
         <BlogCard
-            link={`/blog/${entry.slug}`}
+            link={`/blog/${entry.id}`}
             title={entry.data.title}
             summary={entry.data.summary}
         />
         <div class="my-2 right-0">
-            <Toc headings={headings} />
+            <Toc toc={tocData} />
         </div>
         <div class="prose py-8 w-full mx-auto max-w-none">
-            <Content />
+            <ComarkRenderer tree={tree} className="prose" />
         </div>
         <div>
             <span>Backlinks</span>
@@ -70,7 +88,7 @@ const backlinkEntries = (
                         )
                         .map((entry) => (
                             <BlogCard
-                                link={`/blog/${entry.slug}`}
+                                link={`/blog/${entry.id}`}
                                 title={entry.data.title}
                             />
                         ))
