@@ -1,26 +1,26 @@
 ---
 type NavItem = {
-    link: string;
-    text: string;
+	link: string;
+	text: string;
 };
 
 const nav: NavItem[] = [
-    {
-        link: "/",
-        text: "About",
-    },
-    {
-        link: "/contact",
-        text: "Contact",
-    },
-    {
-        link: "/works",
-        text: "Works",
-    },
-    {
-        link: "/blog",
-        text: "Blog",
-    },
+	{
+		link: "/",
+		text: "About",
+	},
+	{
+		link: "/contact",
+		text: "Contact",
+	},
+	{
+		link: "/works",
+		text: "Works",
+	},
+	{
+		link: "/blog",
+		text: "Blog",
+	},
 ];
 
 const current = `/${Astro.url.pathname.split("/")[1]}`;

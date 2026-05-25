@@ -1,0 +1,31 @@
+---
+export interface Props {
+	id: string;
+	text: string;
+	depth: number;
+	children?: Props[];
+}
+
+const genHash = (n: number) =>
+	[...Array(n).fill("#"), ...Array(5 - n).fill(" ")].join("");
+
+const { id, text, depth, children } = Astro.props;
+---
+
+<li>
+    <a href={`#${id}`} class="flex">
+        <span class="block w-12 flex-shrink-0">
+            {genHash(depth)}
+        </span>
+        {text}
+    </a>
+    {
+        children && children.length > 0 && (
+            <ol class="flex flex-col gap-1 ml-4">
+                {children.map((child) => (
+                    <Astro.self {...child} />
+                ))}
+            </ol>
+        )
+    }
+</li>

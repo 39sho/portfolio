@@ -1,32 +1,31 @@
 ---
-import type { MarkdownHeading } from "astro";
+import TocItem from "./TocItem.astro";
 
-interface Props {
-    headings: MarkdownHeading[];
+export interface TocLink {
+	id: string;
+	text: string;
+	depth: number;
+	children?: TocLink[];
 }
 
-const genHash = (n: number) =>
-    [...Array(n).fill("#"), ...Array(5 - n).fill(" ")].join("");
+export interface Props {
+	toc: {
+		title?: string;
+		depth?: number;
+		searchDepth?: number;
+		links?: TocLink[];
+	};
+}
 
-const { headings } = Astro.props;
+const { toc } = Astro.props;
+const links = toc?.links ?? [];
 ---
 
 <details class="p-2 border-2 border-neutral-200 rounded-lg w-fit">
     <summary>目次</summary>
     <nav class="p-4">
         <ol class="flex flex-col gap-1">
-            {
-                headings.map((heading) => (
-                    <li>
-                        <a href={`#${heading.slug}`} class="flex">
-                            <span class="block w-12 flex-shrink-0">
-                                {genHash(heading.depth)}
-                            </span>
-                            {heading.text}
-                        </a>
-                    </li>
-                ))
-            }
+            {links.map((link) => <TocItem {...link} />)}
         </ol>
     </nav>
 </details>

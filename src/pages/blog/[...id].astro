@@ -1,0 +1,89 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { getCollection, getEntry } from "astro:content";
+import { ComarkRenderer } from "@comark/react";
+import BlogCard from "../../components/BlogCard.astro";
+import Header from "../../components/Header.astro";
+import Toc from "../../components/Toc.astro";
+import Layout from "../../layouts/default.astro";
+import Main from "../../layouts/Main.astro";
+import Stack from "../../layouts/Stack.astro";
+import Alert from "../../components/comark/Alert";
+import Card from "../../components/comark/Card";
+import Tag from "../../components/comark/Tag";
+import { getBacklinks } from "../../lib/backlink";
+import { parsePost } from "../../lib/comark";
+
+type BlogEntry = CollectionEntry<"blog">;
+
+export async function getStaticPaths() {
+	const entries = await getCollection("blog");
+	const backlinks = await getBacklinks(entries);
+
+	return entries.map((entry) => ({
+		params: { id: entry.id },
+		props: {
+			entry,
+			backlink: backlinks.get(`/${entry.collection}/${entry.id}/`) ?? [],
+		},
+	}));
+}
+
+const { entry, backlink } = Astro.props;
+
+const tree = await parsePost((entry as unknown as { body: string }).body ?? "");
+const tocData = tree.meta.toc;
+
+const backlinkEntries = (
+	await Promise.all(
+		backlink.map((link) =>
+			getEntry(link.split("/")[1] as "blog", link.split("/")[2]),
+		),
+	)
+).filter((entry): entry is BlogEntry => entry != null);
+---
+
+<Layout
+    title={`${entry.data.title} | 39sho.dev`}
+    description={entry.data.summary}
+>
+    <div class="sticky top-0 z-50">
+        <Header />
+    </div>
+    <Main>
+        <BlogCard
+            link={`/blog/${entry.id}`}
+            title={entry.data.title}
+            summary={entry.data.summary}
+        />
+        <div class="my-2 right-0">
+            <Toc toc={tocData} />
+        </div>
+        <div class="prose py-8 w-full mx-auto max-w-none">
+            <ComarkRenderer
+                tree={tree}
+                className="prose"
+                components={{ Alert, Card, Tag }}
+            />
+        </div>
+        <div>
+            <span>Backlinks</span>
+            <Stack>
+                {
+                    backlinkEntries
+                        .sort(
+                            (entryA, entryB) =>
+                                entryB.data.date.getTime() -
+                                entryA.data.date.getTime(),
+                        )
+                        .map((entry) => (
+                            <BlogCard
+                                link={`/blog/${entry.id}`}
+                                title={entry.data.title}
+                            />
+                        ))
+                }
+            </Stack>
+        </div>
+    </Main>
+</Layout>

@@ -1,15 +1,17 @@
 ---
-import avator from "../assets/avator.png";
-
-import Layout from "../layouts/default.astro";
-import Avator from "../components/Avator.astro";
-import Hero from "../components/Hero.astro";
-import Main from "../layouts/Main.astro";
 import { getEntry } from "astro:content";
+import { ComarkRenderer } from "@comark/react";
+import avator from "../assets/avator.png";
+import Avator from "../components/Avator.astro";
 import Header from "../components/Header.astro";
+import Hero from "../components/Hero.astro";
+import Layout from "../layouts/default.astro";
+import Main from "../layouts/Main.astro";
+import { parseSimple } from "../lib/comark";
 
 const entry = await getEntry("profile", "about");
-const { Content } = await entry.render();
+const body = (entry as unknown as { body: string }).body ?? "";
+const tree = await parseSimple(body);
 ---
 
 <Layout title="39sho.dev" description="39shoのサイト">
@@ -22,7 +24,7 @@ const { Content } = await entry.render();
 	</div>
 	<Main>
 		<div class="prose prose-table:text-base w-full mx-auto max-w-none">
-			<Content />
+			<ComarkRenderer tree={tree} className="prose" />
 		</div>
 	</Main>
 </Layout>
