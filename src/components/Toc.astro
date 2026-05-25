@@ -2,19 +2,19 @@
 import TocItem from "./TocItem.astro";
 
 export interface TocLink {
-    id: string;
-    text: string;
-    depth: number;
-    children?: TocLink[];
+	id: string;
+	text: string;
+	depth: number;
+	children?: TocLink[];
 }
 
 export interface Props {
-    toc: {
-        title?: string;
-        depth?: number;
-        searchDepth?: number;
-        links?: TocLink[];
-    };
+	toc: {
+		title?: string;
+		depth?: number;
+		searchDepth?: number;
+		links?: TocLink[];
+	};
 }
 
 const { toc } = Astro.props;

@@ -1,13 +1,13 @@
 ---
-import avator from "../assets/avator.png";
-import Layout from "../layouts/default.astro";
-import Avator from "../components/Avator.astro";
-import Hero from "../components/Hero.astro";
-import Main from "../layouts/Main.astro";
-import Header from "../components/Header.astro";
 import { getEntry } from "astro:content";
-import { parseSimple } from "../lib/comark";
 import { ComarkRenderer } from "@comark/react";
+import avator from "../assets/avator.png";
+import Avator from "../components/Avator.astro";
+import Header from "../components/Header.astro";
+import Hero from "../components/Hero.astro";
+import Layout from "../layouts/default.astro";
+import Main from "../layouts/Main.astro";
+import { parseSimple } from "../lib/comark";
 
 const entry = await getEntry("profile", "about");
 const body = (entry as unknown as { body: string }).body ?? "";

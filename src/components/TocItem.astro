@@ -1,13 +1,13 @@
 ---
 export interface Props {
-    id: string;
-    text: string;
-    depth: number;
-    children?: Props[];
+	id: string;
+	text: string;
+	depth: number;
+	children?: Props[];
 }
 
 const genHash = (n: number) =>
-    [...Array(n).fill("#"), ...Array(5 - n).fill(" ")].join("");
+	[...Array(n).fill("#"), ...Array(5 - n).fill(" ")].join("");
 
 const { id, text, depth, children } = Astro.props;
 ---

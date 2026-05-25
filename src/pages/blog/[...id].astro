@@ -1,29 +1,29 @@
 ---
-import { getCollection, getEntry } from "astro:content";
-import Layout from "../../layouts/default.astro";
-import Header from "../../components/Header.astro";
-import BlogCard from "../../components/BlogCard.astro";
-import { getBacklinks } from "../../lib/backlink";
 import type { CollectionEntry } from "astro:content";
-import Stack from "../../layouts/Stack.astro";
-import Main from "../../layouts/Main.astro";
-import Toc from "../../components/Toc.astro";
+import { getCollection, getEntry } from "astro:content";
 import { ComarkRenderer } from "@comark/react";
+import BlogCard from "../../components/BlogCard.astro";
+import Header from "../../components/Header.astro";
+import Toc from "../../components/Toc.astro";
+import Layout from "../../layouts/default.astro";
+import Main from "../../layouts/Main.astro";
+import Stack from "../../layouts/Stack.astro";
+import { getBacklinks } from "../../lib/backlink";
 import { parsePost } from "../../lib/comark";
 
 type BlogEntry = CollectionEntry<"blog">;
 
 export async function getStaticPaths() {
-    const entries = await getCollection("blog");
-    const backlinks = await getBacklinks(entries);
+	const entries = await getCollection("blog");
+	const backlinks = await getBacklinks(entries);
 
-    return entries.map((entry) => ({
-        params: { id: entry.id },
-        props: {
-            entry,
-            backlink: backlinks.get(`/${entry.collection}/${entry.id}/`) ?? [],
-        },
-    }));
+	return entries.map((entry) => ({
+		params: { id: entry.id },
+		props: {
+			entry,
+			backlink: backlinks.get(`/${entry.collection}/${entry.id}/`) ?? [],
+		},
+	}));
 }
 
 const { entry, backlink } = Astro.props;
@@ -32,11 +32,11 @@ const tree = await parsePost((entry as unknown as { body: string }).body ?? "");
 const tocData = tree.meta.toc;
 
 const backlinkEntries = (
-    await Promise.all(
-        backlink.map((link) =>
-            getEntry(link.split("/")[1] as "blog", link.split("/")[2]),
-        ),
-    )
+	await Promise.all(
+		backlink.map((link) =>
+			getEntry(link.split("/")[1] as "blog", link.split("/")[2]),
+		),
+	)
 ).filter((entry): entry is BlogEntry => entry != null);
 ---
 
