@@ -8,6 +8,9 @@ import Toc from "../../components/Toc.astro";
 import Layout from "../../layouts/default.astro";
 import Main from "../../layouts/Main.astro";
 import Stack from "../../layouts/Stack.astro";
+import Alert from "../../components/comark/Alert";
+import Card from "../../components/comark/Card";
+import Tag from "../../components/comark/Tag";
 import { getBacklinks } from "../../lib/backlink";
 import { parsePost } from "../../lib/comark";
 
@@ -57,7 +60,11 @@ const backlinkEntries = (
             <Toc toc={tocData} />
         </div>
         <div class="prose py-8 w-full mx-auto max-w-none">
-            <ComarkRenderer tree={tree} className="prose" />
+            <ComarkRenderer
+                tree={tree}
+                className="prose"
+                components={{ Alert, Card, Tag }}
+            />
         </div>
         <div>
             <span>Backlinks</span>
